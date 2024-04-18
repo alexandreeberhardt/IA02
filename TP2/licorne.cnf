@@ -1,0 +1,12 @@
+c
+c  licone.cnf
+c
+c 1=mortel 2=mythique 3=mammifère 4=corne 5=magique
+c
+p cnf 5 6
+-1 -2 0
+1 2 0
+3 2 0
+4 -3 0
+4 1 0
+-4 5 0
