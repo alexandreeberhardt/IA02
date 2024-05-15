@@ -163,4 +163,76 @@ def tictactoe(strategy_x: Strategy, strategy_o: Strategy, debug: bool = False) -
                 print("-------")
 
                 pprint(grid)
-                grid = play(grid, 1, strategy
+                grid = play(grid, 1, strategy_x(grid, 1))
+                player = 2
+            else:
+                print("-------")
+                pprint(grid)
+                grid = play(grid, 2, strategy_o(grid, 2))
+                player = 1
+        print("le gagnant est joueur", -score(grid) / 2 + 1.5)
+        pprint(grid)
+        return score(grid)
+    return score(grid)
+
+def minmax(grid: State, player: Player) -> float :
+    #Minmax
+
+    if final(grid) :
+        return score(grid)
+
+    if player == X : #max player
+        bestValue = float('-inf')
+
+        for child in legals(grid) :
+            value = minmax(play(grid, X, child), O)
+            bestValue = min(bestValue, value)
+        return bestValue
+    else : #min player
+        bestValue = float('inf')
+
+        for child in legals(grid) :
+            value = minmax(play(grid, O, child), X)
+            bestValue = min(bestValue, value)
+        return bestValue
+    
+def minmaxAction(grid : State, player : Player) -> tuple[float, Action] :
+    if player == X : #max player
+        bestScore = float ('-inf')
+
+        for possibleAction in legals(grid) :
+            evalScore = minmax(play(grid, X, possibleAction), O)
+            
+            if bestScore < evalScore :
+                bestScore = evalScore
+                bestAction = possibleAction
+        
+        return bestScore, bestAction
+    
+    else : #min player
+        bestScore = float('inf')
+        for possibleAction in legals(grid) :
+            evalScore = minmax(play(grid, X, possibleAction), X)
+                    
+            if bestScore < evalScore :
+                bestScore = evalScore
+                bestAction = possibleAction
+                
+        return bestScore, bestAction
+
+def main():
+    "main"
+    # print(grid_tuple_to_grid_list(((1,2,3),(4,5,6),(7,8,9))))
+    # print(grid_list_to_grid_tuple([[1,2,1],[1,0,1],[2,2,0]]))
+    grid=[[2,0,1],[0,0,1],[0,2,0]]
+    pprint(grid)
+    # print(final(grid))
+    # print(legals(grid))
+    # pprint(play(grid,2,strategy(grid,2)))
+    # print(strategy_first_legal(grid,2))
+    #tictactoe(strategy, strategy_random)
+    print(minmax(grid,O))
+
+
+if __name__ == "__main__":
+    main()
